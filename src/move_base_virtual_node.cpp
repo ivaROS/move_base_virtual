@@ -28,15 +28,17 @@
  */
 
 #include <move_base_virtual/move_base_virtual.h>
+#include <tf2_ros/transform_listener.h>
 
 int main(int argc, char** argv){
   ros::init(argc, argv, "move_base_virtual_node");
-  tf::TransformListener tf(ros::Duration(10));
+  tf2_ros::Buffer buffer(ros::Duration(10));
+  tf2_ros::TransformListener tf(buffer);
 
   std::string name = "move_base";
   ros::NodeHandle nh;
   ros::NodeHandle pnh("~");
-  move_base_virtual::MoveBase move_base(nh, pnh, name, tf );
+  move_base_virtual::MoveBase move_base(nh, pnh, name, buffer );
   move_base.init();
 
   //ros::MultiThreadedSpinner s;

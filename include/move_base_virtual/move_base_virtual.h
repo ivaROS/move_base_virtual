@@ -78,7 +78,7 @@ namespace move_base_virtual {
        * @param name The name of the action
        * @param tf A reference to a TransformListener
        */
-      MoveBase(ros::NodeHandle& nh, ros::NodeHandle& pnh, std::string name, tf::TransformListener& tf);
+      MoveBase(ros::NodeHandle& nh, ros::NodeHandle& pnh, std::string name, tf2_ros::Buffer& tf);
 
       /**
        * @brief  Destructor - Cleans up
@@ -157,6 +157,8 @@ namespace move_base_virtual {
 
       bool isQuaternionValid(const geometry_msgs::Quaternion& q);
 
+      bool getRobotPose(geometry_msgs::PoseStamped& global_pose, costmap_2d::Costmap2DROS* costmap);
+
       double distance(const geometry_msgs::PoseStamped& p1, const geometry_msgs::PoseStamped& p2);
 
       geometry_msgs::PoseStamped goalToGlobalFrame(const geometry_msgs::PoseStamped& goal_pose_msg);
@@ -167,7 +169,7 @@ namespace move_base_virtual {
       virtual void wakePlanner(const ros::TimerEvent& event);
 
       std::string name_;
-      tf::TransformListener& tf_;
+      tf2_ros::Buffer& tf_;
       ros::NodeHandle nh, private_nh;
 
       MoveBaseActionServer* as_;
@@ -181,7 +183,7 @@ namespace move_base_virtual {
       std::vector<boost::shared_ptr<nav_core::RecoveryBehavior> > recovery_behaviors_;
       unsigned int recovery_index_;
 
-      tf::Stamped<tf::Pose> global_pose_;
+      geometry_msgs::PoseStamped global_pose_;
       double planner_frequency_, controller_frequency_, inscribed_radius_, circumscribed_radius_;
       double planner_patience_, controller_patience_;
       int32_t max_planning_retries_;
